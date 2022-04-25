@@ -41,7 +41,7 @@ const server = app.listen(process.env.PORT, () =>
 );
 const io = socket(server, {
   cors: {
-    origin: "https://beamish-smakager-d84bf5.netlify.app", //https://beamish-smakager-d84bf5.netlify.app //http://localhost:3000
+    origin: "http://localhost:3000", //https://beamish-smakager-d84bf5.netlify.app //http://localhost:3000
     credentials: true,
   },
 });
@@ -60,4 +60,16 @@ io.on("connection", (socket) => {
       socket.to(sendUserSocket).emit("msg-recieve", data);
     }
   });
+
+  socket.on("send-timer", (data) => {
+    const sendUserSocket = onlineUsers.get(data.to);
+
+    console.log(data, "yyy")
+  
+    if (sendUserSocket) {
+      console.log(data, "vvvv");
+      socket.to(sendUserSocket).emit("timer-receive", data);
+    }
+  });
+
 });
